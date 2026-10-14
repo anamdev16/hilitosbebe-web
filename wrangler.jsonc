@@ -1,0 +1,34 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hilitosbebe-web",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-06-01",
+
+  // Archivos estáticos: "/" = página "Muy pronto", "/preview/" = sitio completo.
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "not_found_handling": "404-page"
+  },
+
+  // Cloudflare crea los registros DNS de estos dominios en cada deploy.
+  "routes": [
+    { "pattern": "hilitosbebe.com", "custom_domain": true },
+    { "pattern": "www.hilitosbebe.com", "custom_domain": true }
+  ],
+
+  // Guarda el token de Instagram renovado y la última copia buena del feed.
+  // Sin "id": wrangler lo crea automáticamente en el primer deploy.
+  "kv_namespaces": [{ "binding": "IG_KV" }],
+
+  // Renueva el token de Instagram cada lunes (los tokens duran 60 días).
+  "triggers": { "crons": ["0 9 * * 1"] },
+
+  "vars": {
+    // Cambiar a "true" para lanzar: el sitio de /preview pasa a la raíz.
+    "SITE_LIVE": "false"
+  },
+
+  "observability": { "enabled": true }
+}

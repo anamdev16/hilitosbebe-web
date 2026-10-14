@@ -1,0 +1,13 @@
+{
+  "name": "hilitosbebe-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sitio web de Hilitos Bebé — hilitosbebe.com",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "4.151.0"
+  }
+}
