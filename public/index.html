@@ -37,6 +37,7 @@
     :root {
       --ivory: #fbf8f3;
       --mint: #a9d9d2;
+      --aqua: #8bd2d6; /* aqua del logo */
       --mint-soft: #dcefeb;
       --mint-deep: #5fa59b;
       --blush: #f3dcd5;
@@ -89,8 +90,8 @@
 
     .seal {
       position: relative;
-      width: 210px;
-      height: 210px;
+      width: clamp(210px, 62vw, 250px);
+      height: clamp(210px, 62vw, 250px);
       margin: 0 auto 34px;
       display: grid;
       place-items: center;
@@ -104,28 +105,21 @@
       stroke-dashoffset: 700;
       animation: sew 3.2s var(--ease) forwards 0.3s;
     }
-    .seal .disc { fill: var(--mint); }
+    .seal .disc { fill: var(--aqua); }
     .seal .needle { transform-origin: 105px 105px; animation: orbit 3.2s var(--ease) forwards 0.3s; }
     @keyframes sew { to { stroke-dashoffset: 0; } }
     @keyframes orbit { from { transform: rotate(-360deg); opacity: 1; } 90% { opacity: 1; } to { transform: rotate(0); opacity: 0; } }
 
-    .brand {
+    .seal picture {
       position: relative;
-      line-height: 1;
-      color: #fff;
-    }
-    .brand b {
       display: block;
-      font-family: "Great Vibes", cursive;
-      font-weight: 400;
-      font-size: 3.6rem;
+      width: 68%;
+      margin-top: 4%;
     }
-    .brand span {
+    .brand {
       display: block;
-      font-size: 0.7rem;
-      letter-spacing: 0.6em;
-      text-transform: uppercase;
-      margin: 4px 0 0 0.6em;
+      width: 100%;
+      height: auto;
     }
 
     .eyebrow {
@@ -218,7 +212,10 @@
             <ellipse cx="105" cy="6" rx="1.2" ry="3" fill="#fbf8f3"/>
           </g>
         </svg>
-        <div class="brand"><b>hilitos</b><span>bebé</span></div>
+        <picture>
+          <source srcset="/img/logo-blanco.webp" type="image/webp">
+          <img class="brand" src="/img/logo-blanco.png" width="857" height="554" alt="Hilitos Bebé">
+        </picture>
       </div>
 
       <div class="eyebrow fade d1">Lencería · Decoración · Moda infantil</div>
