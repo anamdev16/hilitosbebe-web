@@ -3,6 +3,7 @@
  *
  *  - "/"            → página "Muy pronto" (public/index.html)
  *  - "/preview/*"   → sitio completo (public/preview/), sin indexar en Google
+ *  - "/previa/*"    → propuesta B, construida según el brief de la marca (sin indexar)
  *  - "/api/instagram" → últimas publicaciones de @hilitosbebe para la galería
  *  - cron semanal   → renueva el token de Instagram (dura 60 días)
  *
@@ -11,6 +12,9 @@
  */
 
 const PREVIEW = "/preview";
+// Propuestas en revisión: nunca se indexan en Google.
+const HIDDEN = ["/preview", "/previa"];
+const isHidden = (path) => HIDDEN.some((p) => path === p || path.startsWith(p + "/"));
 const FEED_CACHE_SECONDS = 30 * 60;
 const FEED_LIMIT = 24;
 const IG_FIELDS = "id,caption,media_type,media_url,thumbnail_url,permalink,timestamp";
@@ -28,12 +32,13 @@ export default {
       return instagramFeed(request, env, ctx);
     }
 
-    if (env.SITE_LIVE === "true") {
+    // /previa (propuesta B, según el brief) se sirve igual en ambos modos.
+    if (env.SITE_LIVE === "true" && !url.pathname.startsWith("/previa")) {
       return serveLive(request, url, env);
     }
 
     const res = await env.ASSETS.fetch(request);
-    if (url.pathname === PREVIEW || url.pathname.startsWith(PREVIEW + "/")) {
+    if (isHidden(url.pathname)) {
       return withHeaders(res, { "X-Robots-Tag": "noindex, nofollow" });
     }
     return res;
