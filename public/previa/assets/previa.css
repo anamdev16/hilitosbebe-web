@@ -293,6 +293,8 @@ p {
   .tools {
     margin-left: auto;
   }
+}
+@media (max-width: 760px) {
   .tools .hide-m {
     display: none;
   }

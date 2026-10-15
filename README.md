@@ -6,6 +6,7 @@ Website for **Hilitos Bebé**, handmade baby bedding, décor and children's clot
 | --- | --- |
 | `hilitosbebe.com` | "Muy pronto" (coming soon) page |
 | `hilitosbebe.com/preview/` | The full site: Inicio, Nosotros, Galería, Cómo comprar, Contacto. Search engines are told not to index it. |
+| `hilitosbebe.com/previa/` | Proposal B, built from the brand's brief: collections with filters, product pages with embroidery options and the ajuar builder. No prices or cart; every order is sent by WhatsApp. Also hidden from search engines. |
 | `hilitosbebe.com/api/instagram` | Latest Instagram posts as JSON, used by the gallery |
 
 Every push to `main` (or `master`) deploys to Cloudflare through GitHub Actions ([`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)).

@@ -1,4 +1,4 @@
-// Propuesta B — utilidades comunes: carrito, búsqueda, WhatsApp, encabezado.
+// Propuesta B — utilidades comunes: búsqueda, WhatsApp, encabezado. Sin precios ni carrito: todo se pide por WhatsApp.
 
 (function () {
   const HB = window.HB;
@@ -7,10 +7,6 @@
 
   /* ---------- Formatos ---------- */
 
-  HB.usd = (n) => "$" + Number(n).toLocaleString("es-VE", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-  HB.bs = (n) =>
-    "Bs " + (n * HB.config.tasa).toLocaleString("es-VE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  HB.tasaTxt = () => HB.config.tasa.toLocaleString("es-VE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   HB.esc = (s) =>
     String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   HB.norm = (s) =>
@@ -29,12 +25,8 @@
   /* ---------- WhatsApp (brief 12.1) ---------- */
 
   HB.wa = (msg) => `https://wa.me/${HB.config.whatsapp}?text=${encodeURIComponent(msg)}`;
-  HB.waProduct = (p, size, color) =>
-    HB.wa(
-      `Hola, me interesa ${p.name} (${location.origin}${HB.productUrl(p)}).` +
-        (size || color ? ` Vi que es talla ${size || "—"} y color ${color || "—"}.` : "") +
-        " ¿Está disponible?"
-    );
+  HB.waProduct = (p) =>
+    HB.wa(`Hola, me interesa ${p.name} (${location.origin}${HB.productUrl(p)}). ¿Me envían precio y disponibilidad?`);
 
   /* ---------- Almacenamiento seguro ---------- */
 
@@ -55,45 +47,6 @@
   };
   HB.store = store;
 
-  /* ---------- Carrito (persiste 30 días, RF-29) ---------- */
-
-  const CART_KEY = "hb_previa_cart";
-  const THIRTY_DAYS = 30 * 24 * 3600 * 1000;
-
-  HB.cart = {
-    lines() {
-      const data = store.get(CART_KEY, null);
-      if (!data || Date.now() - data.t > THIRTY_DAYS) return [];
-      return data.lines || [];
-    },
-    save(lines) {
-      store.set(CART_KEY, { t: Date.now(), lines });
-      HB.updateBadges();
-    },
-    add(line) {
-      const lines = HB.cart.lines();
-      const key = JSON.stringify({ ...line, qty: 0 });
-      const same = lines.find((l) => JSON.stringify({ ...l, qty: 0 }) === key);
-      if (same) same.qty += line.qty;
-      else lines.push(line);
-      HB.cart.save(lines);
-    },
-    count() {
-      return HB.cart.lines().reduce((n, l) => n + l.qty, 0);
-    },
-    total() {
-      return HB.cart.lines().reduce((n, l) => n + l.unit * l.qty, 0);
-    },
-  };
-
-  HB.updateBadges = () => {
-    const n = HB.cart.count();
-    document.querySelectorAll("[data-cart-count]").forEach((b) => {
-      b.textContent = n;
-      b.dataset.count = n;
-    });
-  };
-
   /* ---------- Aviso ---------- */
 
   HB.toast = (msg, href, linkText) => {
@@ -112,22 +65,20 @@
 
   /* ---------- Tarjeta de producto ---------- */
 
-  HB.priceLabel = (p) => (p.quote && !p.price ? "Precio a consultar" : (p.from ? "desde " : "") + HB.usd(p.price));
-
   HB.card = (p) => {
     const tags = [];
     if (p.personalizable) tags.push('<span class="tag">Personalizable</span>');
     if (p.tags.includes("nuevo")) tags.push('<span class="tag tag--salvia">Nuevo</span>');
     if (p.tags.includes("regalo")) tags.push('<span class="tag tag--ocre">Regalo</span>');
     if (p.stock === "encargo") tags.push('<span class="tag tag--ocre">Por encargo</span>');
-    const flag = p.tags.includes("mas-vendido") ? '<span class="flag">Más vendido</span>' : "";
+    const flag = p.tags.includes("mas-vendido") ? '<span class="flag">Más pedido</span>' : "";
     return `<article class="pcard">${flag}
       <a href="${HB.productUrl(p)}">${HB.ph(p.icon, p.tone, "foto de ejemplo")}
         <h3>${HB.esc(p.name)}</h3>
-        <p class="price">${HB.priceLabel(p)} ${p.price ? `<small>· ${HB.bs(p.price)}</small>` : ""}</p>
+        <p class="price muted small">${HB.esc(p.short)}</p>
       </a>
       <div class="tags">${tags.join("")}</div>
-      <a class="btn wa-quick" href="${HB.waProduct(p)}" target="_blank" rel="noopener" data-wa="tarjeta">Pedir por WhatsApp</a>
+      <a class="btn wa-quick" href="${HB.waProduct(p)}" target="_blank" rel="noopener">Pedir por WhatsApp</a>
     </article>`;
   };
 
@@ -189,7 +140,7 @@
                 (p) =>
                   `<a href="${HB.productUrl(p)}">${HB.ph(p.icon, p.tone)}<span>${HB.esc(p.name)}<br><small class="muted">${HB.esc(
                     HB.byCat(p.cat).name
-                  )}</small></span><span class="small">${HB.priceLabel(p)}</span></a>`
+                  )}</small></span><span></span></a>`
               )
               .join("")
           : `<div class="empty" style="margin-top:14px"><p>No encontramos “${HB.esc(q)}”.</p>
@@ -275,7 +226,7 @@
       let list = HB.products;
       if (kind === "tag") list = list.filter((p) => p.tags.includes(value));
       if (kind === "cat") list = list.filter((p) => p.cat === value);
-      if (kind === "top") list = [...list].filter((p) => p.price).sort((a, b) => b.sold - a.sold);
+      if (kind === "top") list = [...list].sort((a, b) => b.sold - a.sold);
       el.innerHTML = list.slice(0, Number(limit) || 8).map(HB.card).join("");
     });
     document.querySelectorAll("[data-ig]").forEach((el) => {
@@ -294,9 +245,6 @@
             .join("");
         })
         .catch(() => {});
-    });
-    document.querySelectorAll("[data-tasa]").forEach((el) => {
-      el.textContent = `Bs ${HB.tasaTxt()} por USD · ${HB.config.tasaFecha}`;
     });
   }
 
@@ -333,6 +281,5 @@
     setupHero();
     fillBlocks();
     setupWaForms();
-    HB.updateBadges();
   });
 })();

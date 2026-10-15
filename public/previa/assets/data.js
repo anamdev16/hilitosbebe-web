@@ -1,5 +1,5 @@
 // Catálogo de EJEMPLO para la propuesta B.
-// Precios, fotos y stock son ilustrativos: la marca debe completarlos (brief, sección 21).
+// Sin precios: cada pedido se cotiza por WhatsApp. Fotos y piezas son ilustrativas.
 
 window.HB = window.HB || {};
 
@@ -7,9 +7,6 @@ HB.config = {
   whatsapp: "584129869030",
   instagram: "https://www.instagram.com/hilitosbebe/",
   tiktok: "https://www.tiktok.com/@hilitosbebe",
-  // Tasa de referencia del brief (15/10/2026: Bs 878–887). La versión final la toma del BCV cada día.
-  tasa: 882.5,
-  tasaFecha: "15/10/2026",
   direccion: "C.C. Galerías Los Naranjos, PB, Local 22 · Av. Principal de Los Naranjos, Caracas",
 };
 
@@ -91,67 +88,67 @@ HB.fabrics = {
   doble: { name: "Doble algodón", days: "5 a 7 días hábiles" },
 };
 
-// Recargo por estilo de bordado (USD, ejemplo)
+// Estilos de bordado
 HB.embroidery = [
-  { id: "ninguno", name: "Sin bordado", extra: 0 },
-  { id: "iniciales", name: "Iniciales", extra: 5 },
-  { id: "nombre", name: "Nombre completo", extra: 8 },
-  { id: "floral", name: "Floral", extra: 12 },
-  { id: "tematico", name: "Temático", extra: 15 },
+  { id: "ninguno", name: "Sin bordado" },
+  { id: "iniciales", name: "Iniciales" },
+  { id: "nombre", name: "Nombre completo" },
+  { id: "floral", name: "Floral" },
+  { id: "tematico", name: "Temático" },
 ];
 
-const P = (o) => ({ sizes: [], colors: ["neutro"], personalizable: false, quote: false, stock: "stock", tags: [], ...o });
+const P = (o) => ({ sizes: [], colors: ["neutro"], personalizable: false, stock: "stock", tags: [], ...o });
 
 HB.products = [
   P({ slug: "faldon-amanda-de-bautizo", name: "Faldón Amanda de bautizo", cat: "bautizo-y-primeras-puestas", icon: "vestido", tone: "lino",
-    short: "Conjunto de ceremonia en tela española, bordado con su nombre.", price: 85, from: true, fabric: "espanola",
+    short: "Conjunto de ceremonia en tela española, bordado con su nombre.", fabric: "espanola",
     sizes: ["0 m", "3 m", "6 m", "9 m", "12 m"], colors: ["neutro", "rosa", "blanco", "floral"], personalizable: true, tags: ["mas-vendido"], sold: 98 }),
   P({ slug: "faldellin-clara", name: "Faldellín Clara", cat: "bautizo-y-primeras-puestas", icon: "vestido", tone: "rosa",
-    short: "Faldellín corto con encaje y lazo de raso.", price: 64, from: true, fabric: "espanola",
+    short: "Faldellín corto con encaje y lazo de raso.", fabric: "espanola",
     sizes: ["3 m", "6 m", "9 m", "12 m"], colors: ["blanco", "neutro"], personalizable: true, sold: 40, date: 9 }),
   P({ slug: "zapatitos-de-bautizo", name: "Zapatitos de bautizo", cat: "bautizo-y-primeras-puestas", icon: "zapatos", tone: "arena",
-    short: "Zapatitos de tela con suela suave.", price: 22, fabric: "espanola", sizes: ["0 m", "3 m", "6 m"], colors: ["blanco", "neutro"], sold: 33 }),
+    short: "Zapatitos de tela con suela suave.", fabric: "espanola", sizes: ["0 m", "3 m", "6 m"], colors: ["blanco", "neutro"], sold: 33 }),
   P({ slug: "kit-de-clinica-completo", name: "Kit de clínica completo", cat: "kit-de-clinica", icon: "estuche", tone: "arena",
-    short: "Paños, manta, estuches, gorro y manoplas en un solo set.", price: 120, from: true, fabric: "pima",
+    short: "Paños, manta, estuches, gorro y manoplas en un solo set.", fabric: "pima",
     colors: ["neutro", "arena", "rosa"], personalizable: true, tags: ["mas-vendido", "regalo"], sold: 120,
     includes: ["Set de 3 estuches", "Manta de arrullo", "Babero y buchero", "Gorro y manoplas", "2 paños de algodón"] }),
   P({ slug: "set-de-estuches", name: "Set de estuches (3 tamaños)", cat: "kit-de-clinica", icon: "estuche", tone: "salvia",
-    short: "Para organizar la maleta de la clínica.", price: 38, fabric: "doble", colors: ["neutro", "rosa", "azul"], personalizable: true, sold: 51 }),
+    short: "Para organizar la maleta de la clínica.", fabric: "doble", colors: ["neutro", "rosa", "azul"], personalizable: true, sold: 51 }),
   P({ slug: "manta-tejida-personalizada", name: "Manta tejida personalizada", cat: "kit-de-clinica", icon: "manta", tone: "rosa",
-    short: "Manta tejida a mano con su nombre bordado.", price: 45, from: true, fabric: "peruano",
+    short: "Manta tejida a mano con su nombre bordado.", fabric: "peruano",
     colors: ["neutro", "rosa", "azul", "blanco"], personalizable: true, tags: ["mas-vendido"], sold: 87 }),
   P({ slug: "ajuar-de-nacimiento-7-piezas", name: "Ajuar de nacimiento 7 piezas", cat: "ajuar-de-nacimiento", icon: "body", tone: "rosa",
-    short: "Todo lo esencial para sus primeras semanas.", price: 180, from: true, fabric: "pima",
-    sizes: ["RN", "0 m", "3 m"], colors: ["neutro", "rosa", "azul"], personalizable: true, quote: true, stock: "encargo", tags: ["mas-vendido"], sold: 64,
+    short: "Todo lo esencial para sus primeras semanas.", fabric: "pima",
+    sizes: ["RN", "0 m", "3 m"], colors: ["neutro", "rosa", "azul"], personalizable: true, stock: "encargo", tags: ["mas-vendido"], sold: 64,
     includes: ["3 bodies manga larga", "2 monitos", "Gorro y manoplas", "Cobija de arrullo"] }),
   P({ slug: "conjunto-primera-puesta", name: "Conjunto primera puesta", cat: "ajuar-de-nacimiento", icon: "body", tone: "cielo",
-    short: "La pieza con la que sale de la clínica.", price: 55, from: true, fabric: "pima", sizes: ["RN", "0 m"],
+    short: "La pieza con la que sale de la clínica.", fabric: "pima", sizes: ["RN", "0 m"],
     colors: ["blanco", "neutro", "azul", "rosa"], personalizable: true, tags: ["nuevo"], sold: 30, date: 2 }),
   P({ slug: "protector-de-cuna-bordado", name: "Protector de cuna bordado", cat: "lenceria-de-cuna", icon: "cuna", tone: "salvia",
-    short: "Bumper acolchado con bordado a juego.", price: 95, from: true, fabric: "doble",
+    short: "Bumper acolchado con bordado a juego.", fabric: "doble",
     colors: ["neutro", "rosa", "azul", "blanco"], personalizable: true, stock: "encargo", tags: ["mas-vendido"], sold: 77 }),
   P({ slug: "juego-de-sabanas", name: "Juego de sábanas de cuna", cat: "lenceria-de-cuna", icon: "manta", tone: "lino",
-    short: "Sábana ajustable, sábana superior y funda.", price: 48, fabric: "pima", colors: ["neutro", "blanco", "rosa", "azul"], sold: 58 }),
+    short: "Sábana ajustable, sábana superior y funda.", fabric: "pima", colors: ["neutro", "blanco", "rosa", "azul"], sold: 58 }),
   P({ slug: "cojin-de-lactancia", name: "Cojín de lactancia", cat: "lenceria-de-cuna", icon: "cojin", tone: "rosa",
-    short: "Firme y lavable, con funda removible.", price: 42, fabric: "doble", colors: ["neutro", "rosa", "arena"], personalizable: true, tags: ["nuevo"], sold: 25, date: 4 }),
+    short: "Firme y lavable, con funda removible.", fabric: "doble", colors: ["neutro", "rosa", "arena"], personalizable: true, tags: ["nuevo"], sold: 25, date: 4 }),
   P({ slug: "nido-para-bebe", name: "Nido para bebé", cat: "lenceria-de-cuna", icon: "cojin", tone: "arena",
-    short: "Nido acolchado para sus primeras siestas.", price: 70, fabric: "doble", colors: ["neutro", "arena"], stock: "encargo", sold: 20 }),
+    short: "Nido acolchado para sus primeras siestas.", fabric: "doble", colors: ["neutro", "arena"], stock: "encargo", sold: 20 }),
   P({ slug: "conjunto-hilo-peruano", name: "Conjunto hilo peruano", cat: "moda-infantil", icon: "pijama", tone: "cielo",
-    short: "Suéter y pantalón tejidos, suaves y frescos.", price: 39, fabric: "peruano",
+    short: "Suéter y pantalón tejidos, suaves y frescos.", fabric: "peruano",
     sizes: ["3 m", "6 m", "9 m", "12 m", "18 m", "24 m"], colors: ["neutro", "azul", "rosa"], tags: ["nuevo"], sold: 44, date: 1 }),
   P({ slug: "pijama-algodon-pima", name: "Pijama de algodón pima", cat: "moda-infantil", icon: "pijama", tone: "lino",
-    short: "Enterizo con botones de presión.", price: 26, fabric: "pima", sizes: ["0 m", "3 m", "6 m", "9 m", "12 m"], colors: ["blanco", "azul", "rosa"], sold: 61 }),
+    short: "Enterizo con botones de presión.", fabric: "pima", sizes: ["0 m", "3 m", "6 m", "9 m", "12 m"], colors: ["blanco", "azul", "rosa"], sold: 61 }),
   P({ slug: "cojin-personalizado-con-nombre", name: "Cojín personalizado con nombre", cat: "decoracion-y-regalos", icon: "cojin", tone: "ocre",
-    short: "Cojín decorativo bordado para su habitación.", price: 30, from: true, fabric: "doble",
+    short: "Cojín decorativo bordado para su habitación.", fabric: "doble",
     colors: ["neutro", "rosa", "azul"], personalizable: true, tags: ["regalo"], sold: 49 }),
   P({ slug: "colgante-de-cuna", name: "Colgante de cuna", cat: "decoracion-y-regalos", icon: "colgante", tone: "salvia",
-    short: "Móvil de tela hecho a mano.", price: 34, fabric: "doble", colors: ["neutro", "rosa", "azul"], tags: ["regalo"], sold: 18 }),
+    short: "Móvil de tela hecho a mano.", fabric: "doble", colors: ["neutro", "rosa", "azul"], tags: ["regalo"], sold: 18 }),
   P({ slug: "combo-regalo-bienvenida", name: "Combo regalo de bienvenida", cat: "decoracion-y-regalos", icon: "regalo", tone: "rosa",
-    short: "Manta, babero y gorro en caja de regalo con dedicatoria.", price: 75, fabric: "pima",
+    short: "Manta, babero y gorro en caja de regalo con dedicatoria.", fabric: "pima",
     colors: ["neutro", "rosa", "azul"], personalizable: true, tags: ["regalo", "combo"], sold: 36,
     includes: ["Manta de arrullo", "Babero", "Gorro", "Caja de regalo y tarjeta"] }),
   P({ slug: "diseno-a-medida", name: "Diseño a medida", cat: "personalizados", icon: "aro", tone: "rosa",
-    short: "Cuéntanos tu idea y la bordamos para tu bebé.", price: 0, fabric: "espanola", quote: true, stock: "encargo", sold: 5 }),
+    short: "Cuéntanos tu idea y la bordamos para tu bebé.", fabric: "espanola", stock: "encargo", sold: 5 }),
 ];
 
 // Piezas del armador por tipo (brief 5.6)
@@ -159,35 +156,35 @@ HB.builder = {
   ajuar: {
     name: "Ajuar de nacimiento", desc: "Las piezas para su llegada y sus primeras semanas.",
     pieces: [
-      { id: "bodies", name: "Bodies manga larga", note: "algodón pima", price: 12, icon: "body", req: true, qty: 3 },
-      { id: "monitos", name: "Monitos", note: "con pie", price: 10, icon: "pijama", qty: 2 },
-      { id: "primera", name: "Conjunto primera puesta", note: "para salir de la clínica", price: 55, icon: "body", req: true },
-      { id: "gorro", name: "Gorro y manoplas", note: "tono a juego", price: 14, icon: "gorro" },
-      { id: "arrullo", name: "Cobija de arrullo", note: "doble algodón", price: 28, icon: "manta" },
-      { id: "manta", name: "Manta tejida personalizada", note: "con nombre bordado", price: 45, icon: "manta" },
-      { id: "babero", name: "Babero y buchero", note: "algodón pima", price: 16, icon: "babero" },
+      { id: "bodies", name: "Bodies manga larga", note: "algodón pima", icon: "body", req: true, qty: 3 },
+      { id: "monitos", name: "Monitos", note: "con pie", icon: "pijama", qty: 2 },
+      { id: "primera", name: "Conjunto primera puesta", note: "para salir de la clínica", icon: "body", req: true },
+      { id: "gorro", name: "Gorro y manoplas", note: "tono a juego", icon: "gorro" },
+      { id: "arrullo", name: "Cobija de arrullo", note: "doble algodón", icon: "manta" },
+      { id: "manta", name: "Manta tejida personalizada", note: "con nombre bordado", icon: "manta" },
+      { id: "babero", name: "Babero y buchero", note: "algodón pima", icon: "babero" },
     ],
   },
   clinica: {
     name: "Kit de clínica", desc: "Todo empacado para llevar a la clínica.",
     pieces: [
-      { id: "estuches", name: "Set de estuches", note: "3 tamaños", price: 38, icon: "estuche", req: true },
-      { id: "manta", name: "Manta tejida personalizada", note: "con nombre bordado", price: 45, icon: "manta" },
-      { id: "babero", name: "Babero y buchero", note: "algodón pima", price: 16, icon: "babero" },
-      { id: "gorro", name: "Gorro y manoplas", note: "tono neutro", price: 14, icon: "gorro" },
-      { id: "arrullo", name: "Cobija de arrullo", note: "doble algodón", price: 28, icon: "manta" },
-      { id: "primera", name: "Conjunto primera puesta", note: "para salir de la clínica", price: 55, icon: "body", req: true },
+      { id: "estuches", name: "Set de estuches", note: "3 tamaños", icon: "estuche", req: true },
+      { id: "manta", name: "Manta tejida personalizada", note: "con nombre bordado", icon: "manta" },
+      { id: "babero", name: "Babero y buchero", note: "algodón pima", icon: "babero" },
+      { id: "gorro", name: "Gorro y manoplas", note: "tono neutro", icon: "gorro" },
+      { id: "arrullo", name: "Cobija de arrullo", note: "doble algodón", icon: "manta" },
+      { id: "primera", name: "Conjunto primera puesta", note: "para salir de la clínica", icon: "body", req: true },
     ],
   },
   cuna: {
     name: "Juego de cuna", desc: "La lencería completa de su cuna.",
     pieces: [
-      { id: "protector", name: "Protector de cuna", note: "acolchado", price: 95, icon: "cuna", req: true },
-      { id: "sabanas", name: "Juego de sábanas", note: "3 piezas", price: 48, icon: "manta", req: true },
-      { id: "almohada", name: "Almohada bordada", note: "con su nombre", price: 24, icon: "cojin" },
-      { id: "cojin", name: "Cojín decorativo", note: "a juego", price: 30, icon: "cojin" },
-      { id: "nido", name: "Nido", note: "para siestas", price: 70, icon: "cojin" },
-      { id: "colgante", name: "Colgante de cuna", note: "móvil de tela", price: 34, icon: "colgante" },
+      { id: "protector", name: "Protector de cuna", note: "acolchado", icon: "cuna", req: true },
+      { id: "sabanas", name: "Juego de sábanas", note: "3 piezas", icon: "manta", req: true },
+      { id: "almohada", name: "Almohada bordada", note: "con su nombre", icon: "cojin" },
+      { id: "cojin", name: "Cojín decorativo", note: "a juego", icon: "cojin" },
+      { id: "nido", name: "Nido", note: "para siestas", icon: "cojin" },
+      { id: "colgante", name: "Colgante de cuna", note: "móvil de tela", icon: "colgante" },
     ],
   },
 };

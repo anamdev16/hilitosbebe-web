@@ -1,4 +1,5 @@
-// Propuesta B — Armador de ajuar y kit de clínica en 5 pasos (brief 5.6, RF-21 a RF-25).
+// Propuesta B — Armador de ajuar y kit de clínica en 5 pasos (brief 5.6).
+// Sin precios: el resumen se envía por WhatsApp y la tienda responde con la cotización.
 
 (function () {
   const HB = window.HB;
@@ -36,9 +37,7 @@
   const set = () => s.type && HB.builder[s.type];
   const selected = () => (set() ? set().pieces.filter((p) => s.pieces[p.id] > 0) : []);
   const style = () => HB.embroidery.find((e) => e.id === s.style);
-  const piecesTotal = () => selected().reduce((n, p) => n + p.price * s.pieces[p.id], 0);
-  const embroideryTotal = () => (s.style === "ninguno" ? 0 : style().extra * selected().length);
-  const total = () => piecesTotal() + embroideryTotal();
+  const units = () => selected().reduce((n, p) => n + s.pieces[p.id], 0);
 
   function save() {
     HB.store.set(KEY, s);
@@ -94,7 +93,7 @@
           const q = s.pieces[p.id] || 0;
           return `<div class="piece ${q ? "on" : ""}">${HB.ph(p.icon, q ? "rosa" : "lino")}
           <div><div class="piece-top"><label><input type="checkbox" data-piece="${p.id}" ${q ? "checked" : ""} ${p.req ? "disabled" : ""}>
-            <span>${p.name}<br><small class="muted">${p.note}${p.req ? " · imprescindible" : ""}</small></span></label><span class="small">${HB.usd(p.price)}</span></div>
+            <span>${p.name}<br><small class="muted">${p.note}${p.req ? " · imprescindible" : ""}</small></span></label></div>
             <div class="qty" ${q ? "" : 'style="visibility:hidden"'}><button type="button" data-pq="${p.id}" data-d="-1" aria-label="Menos">−</button><output>${q || 1}</output><button type="button" data-pq="${p.id}" data-d="1" aria-label="Más">+</button></div>
           </div></div>`;
         })
@@ -111,9 +110,9 @@
         )
         .join("")}</div></div>`,
     // 4. Bordado
-    () => `<h2>Bordado</h2><p class="muted">El bordado se aplica a cada pieza elegida (${selected().length}). Tarda 3 a 5 días hábiles adicionales.</p>
+    () => `<h2>Bordado</h2><p class="muted">Bordamos el nombre en las piezas que elegiste (${selected().length}). Tarda 3 a 5 días hábiles adicionales.</p>
       <div class="chips">${HB.embroidery
-        .map((e) => `<button type="button" class="chip" aria-pressed="${s.style === e.id}" data-style="${e.id}">${e.name}${e.extra ? ` <small>+${HB.usd(e.extra)}/pieza</small>` : ""}</button>`)
+        .map((e) => `<button type="button" class="chip" aria-pressed="${s.style === e.id}" data-style="${e.id}">${e.name}</button>`)
         .join("")}</div>
       ${
         s.style === "ninguno"
@@ -139,12 +138,11 @@
             <dt>Bordado</dt><dd>${s.style === "ninguno" ? "Sin bordado" : `${style().name} “${HB.esc(s.text)}”`}</dd>
             <dt>Confección</dt><dd>${f.days}${s.style === "ninguno" ? "" : " + 3 a 5 de bordado"}</dd>
           </dl>
-          <p class="note" style="margin-top:16px">El bordado y el envío se confirman al finalizar. Si el total supera <span class="pending">monto por definir</span>, podrás pagarlo en dos partes.</p>
+          <p class="note" style="margin-top:16px">Envíanos tu ajuar por WhatsApp y te respondemos con el precio, el tiempo de entrega y las opciones de envío.</p>
         </div>
       </div>
-      <div class="grid-3" style="margin-top:20px">
-        <a class="btn btn--rosa" data-out="cotizar" target="_blank" rel="noopener">Solicitar cotización</a>
-        <a class="btn" data-out="wa" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+      <div class="grid-2" style="margin-top:20px">
+        <a class="btn btn--rosa" data-out="wa" target="_blank" rel="noopener">Pedir precio por WhatsApp</a>
         <button type="button" class="btn" data-out="guardar">Guardar y seguir después</button>
       </div>`;
     },
@@ -157,16 +155,16 @@
     return "";
   }
 
-  function message(kind) {
+  function message() {
     const lines = selected()
-      .map((p) => `• ${s.pieces[p.id]} × ${p.name} — ${HB.usd(p.price * s.pieces[p.id])}`)
+      .map((p) => `• ${s.pieces[p.id]} × ${p.name}`)
       .join("\n");
     return (
-      (kind === "cotizar" ? `Hola, quiero cotizar este ${set().name.toLowerCase()}:\n` : `Hola, armé este ${set().name.toLowerCase()}:\n`) +
-      `${lines}\n\nPaleta: ${HB.colors[s.color].name}\nTela: ${HB.fabrics[s.fabric].name}\n` +
-      `Bordado: ${s.style === "ninguno" ? "sin bordado" : `${style().name} “${s.text.trim()}” (+${HB.usd(embroideryTotal())})`}\n` +
+      `Hola, armé este ${set().name.toLowerCase()} en la web:\n${lines}\n\n` +
+      `Paleta: ${HB.colors[s.color].name}\nTela: ${HB.fabrics[s.fabric].name}\n` +
+      `Bordado: ${s.style === "ninguno" ? "sin bordado" : `${style().name} “${s.text.trim()}”`}\n` +
       (s.due ? `Fecha probable de parto: ${s.due.split("-").reverse().join("/")}\n` : "") +
-      `\nSubtotal estimado: ${HB.usd(total())} (${HB.bs(total())}). ¿Me confirman?`
+      `\n¿Me envían el precio y el tiempo de entrega?`
     );
   }
 
@@ -185,8 +183,7 @@
          ${s.step < 4 ? `<button type="button" class="btn btn--rosa" data-next>Continuar</button>` : ""}
        </div>`;
     if (s.step === 4) {
-      panel.querySelector("[data-out=cotizar]").href = HB.wa(message("cotizar"));
-      panel.querySelector("[data-out=wa]").href = HB.wa(message("wa"));
+      panel.querySelector("[data-out=wa]").href = HB.wa(message());
     }
     renderSummary();
     save();
@@ -199,14 +196,14 @@
       ${HB.ph(s.type === "cuna" ? "cuna" : s.type === "clinica" ? "estuche" : "body", list.length ? "rosa" : "lino", "vista previa", "ph--wide")}
       <ul>${
         list.length
-          ? list.map((p) => `<li><span>${s.pieces[p.id]} × ${p.name}</span><span>${HB.usd(p.price * s.pieces[p.id])}</span></li>`).join("") +
-            (embroideryTotal() ? `<li><span>Bordado ${style().name.toLowerCase()} × ${list.length}</span><span>${HB.usd(embroideryTotal())}</span></li>` : "")
+          ? list.map((p) => `<li><span>${p.name}</span><span>× ${s.pieces[p.id]}</span></li>`).join("") +
+            (s.style !== "ninguno" ? `<li><span>Bordado ${style().name.toLowerCase()}${s.text.trim() ? ` “${HB.esc(s.text.trim())}”` : ""}</span><span></span></li>` : "")
           : '<li><span class="muted">Aún no has elegido piezas.</span></li>'
       }</ul>
-      <div class="total"><span>Subtotal estimado</span><span>${HB.usd(total())}</span></div>
-      <p class="small muted">${HB.bs(total())} · el bordado y el envío se confirman al finalizar.</p>`;
+      <div class="total"><span>Piezas</span><span>${units()}</span></div>
+      <p class="small muted">Te enviamos el precio por WhatsApp al terminar.</p>`;
     summary.innerHTML = html;
-    if (mobileSum) mobileSum.querySelector("[data-msum]").textContent = HB.usd(total());
+    if (mobileSum) mobileSum.querySelector("[data-msum]").textContent = `${units()} piezas`;
   }
 
   /* ---------- Eventos ---------- */
