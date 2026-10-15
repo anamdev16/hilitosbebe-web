@@ -148,18 +148,10 @@ p {
   line-height: 1;
   color: var(--ink);
 }
-.brand__name {
-  font-family: var(--script);
-  font-size: 2.3rem;
-  color: var(--mint-deep);
-}
-.brand__sub {
-  font-family: var(--sans);
-  font-size: 0.6rem;
-  letter-spacing: 0.55em;
-  text-transform: uppercase;
-  margin: 2px 0 0 0.55em;
-  color: var(--ink-soft);
+.brand__logo {
+  display: block;
+  width: auto;
+  height: 56px;
 }
 
 /* ---------- Encabezado ---------- */
@@ -954,8 +946,8 @@ tbody tr:hover {
   align-items: flex-start;
   margin-bottom: 14px;
 }
-.footer-grid .brand__sub {
-  margin-left: 0.2em;
+.footer-grid .brand__logo {
+  height: 76px;
 }
 .footer-bottom {
   margin-top: 54px;
