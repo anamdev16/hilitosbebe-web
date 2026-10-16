@@ -22,32 +22,41 @@ const IG_FIELDS = "id,caption,media_type,media_url,thumbnail_url,permalink,times
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    const isLocal = url.hostname === "localhost" || url.hostname === "127.0.0.1";
 
-    if (url.hostname.startsWith("www.")) {
-      url.hostname = url.hostname.slice(4);
+    // Siempre https://hilitosbebe.com (sin www): evita el aviso "No seguro".
+    if (!isLocal && (url.protocol === "http:" || url.hostname.startsWith("www."))) {
+      url.protocol = "https:";
+      url.hostname = url.hostname.replace(/^www\./, "");
       return Response.redirect(url.toString(), 301);
     }
 
-    if (url.pathname === "/api/instagram") {
-      return instagramFeed(request, env, ctx);
-    }
-
-    // /previa (propuesta B, según el brief) se sirve igual en ambos modos.
-    if (env.SITE_LIVE === "true" && !url.pathname.startsWith("/previa")) {
-      return serveLive(request, url, env);
-    }
-
-    const res = await env.ASSETS.fetch(request);
-    if (isHidden(url.pathname)) {
-      return withHeaders(res, { "X-Robots-Tag": "noindex, nofollow" });
-    }
-    return res;
+    const res = await route(request, url, env, ctx);
+    // HSTS: el navegador recuerda usar siempre HTTPS durante un año.
+    return isLocal ? res : withHeaders(res, { "Strict-Transport-Security": "max-age=31536000" });
   },
 
   async scheduled(event, env, ctx) {
     ctx.waitUntil(refreshInstagramToken(env));
   },
 };
+
+async function route(request, url, env, ctx) {
+  if (url.pathname === "/api/instagram") {
+    return instagramFeed(request, env, ctx);
+  }
+
+  // /previa (propuesta B, según el brief) se sirve igual en ambos modos.
+  if (env.SITE_LIVE === "true" && !url.pathname.startsWith("/previa")) {
+    return serveLive(request, url, env);
+  }
+
+  const res = await env.ASSETS.fetch(request);
+  if (isHidden(url.pathname)) {
+    return withHeaders(res, { "X-Robots-Tag": "noindex, nofollow" });
+  }
+  return res;
+}
 
 /* ------------------------------------------------------------------ */
 /* Lanzamiento: sirve /preview/* desde la raíz                         */
